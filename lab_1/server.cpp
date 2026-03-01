@@ -16,19 +16,31 @@ int main() {
 	
 	bind(sock_fd, (struct sockaddr*)&serverAddr, sizeof(serverAddr));
 
+	std::cout << "UDP server started on port " << 8080 << std::endl;
+
 	char buffer[BUF_SIZE];
 	socklen_t addrLen = sizeof(clientAddr);
-	int n = recvfrom(sock_fd, buffer, 1024, 0, 
-				(struct sockaddr*)&clientAddr, &addrLen);
-	buffer[n] = '\n';
-	char ip[INET_ADDRSTRLEN];
-	inet_ntop(AF_INET, &clientAddr.sin_addr, ip, sizeof(ip));
-	int port = ntohs(clientAddr.sin_port);
-	std::cout << "Client = " << ip << ":" << port << " -> " << buffer << std::endl;
-	sendto(sock_fd, "hello from server", 17, 0, 
-			(struct sockaddr*)&clientAddr, addrLen);
+	while (true) {
+        int n = recvfrom(sock_fd, buffer, BUF_SIZE - 1, 0, (struct sockaddr*)&clientAddr, &addrLen);
+		
+		if (n < 0) {
+            perror("recvfrom error");
+            continue;
+        }
+
+		buffer[n] = '\0';  
+
+        char ip[INET_ADDRSTRLEN];
+        inet_ntop(AF_INET, &clientAddr.sin_addr, ip, sizeof(ip));
+        int port = ntohs(clientAddr.sin_port);
+
+        std::cout << "Client = " << ip << ":" << port
+                  << " -> " << buffer << std::endl;
+
+     
+        sendto(sock_fd, buffer, n, 0,
+               (struct sockaddr*)&clientAddr, addrLen);
+	}
 	close(sock_fd);
 	return 0;
-	
-
 }
