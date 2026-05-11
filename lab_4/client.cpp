@@ -89,24 +89,29 @@ bool connect_to_server() {
     msg.payload[MAX_PAYLOAD - 1] = '\0';
     if (send(fd, &msg, sizeof(msg), 0) < 0) { close(fd); return false; }
 
-    // ответ сервера
-    bytes = recv(fd, &msg, sizeof(msg), 0);
-    if (bytes <= 0) { close(fd); return false; }
+    // ответ сервера после MSG_AUTH
+bytes = recv(fd, &msg, sizeof(msg), 0);
+if (bytes <= 0) { close(fd); return false; }
 
-    if (msg.type == MSG_ERROR) {
-        msg.payload[MAX_PAYLOAD - 1] = '\0';
-        std::cerr << "[ERROR] " << msg.payload << std::endl;
-        close(fd);
-        return false;
-    }
+msg.payload[MAX_PAYLOAD - 1] = '\0';
 
-    pthread_mutex_lock(&sock_mutex);
-    sockfd    = fd;
-    connected = true;
-    pthread_mutex_unlock(&sock_mutex);
+if (msg.type == MSG_ERROR) {
+    std::cerr << "[ERROR] " << msg.payload << std::endl;
+    close(fd);
+    return false;
+}
 
-    std::cout << "Connected as " << nickname << std::endl;
-    return true;
+if (msg.type == MSG_SERVER_INFO) {
+    std::cout << "[SERVER] " << msg.payload << std::endl; // "Welcome, nickname!"
+}
+
+pthread_mutex_lock(&sock_mutex);
+sockfd    = fd;
+connected = true;
+pthread_mutex_unlock(&sock_mutex);
+
+std::cout << "Connected as " << nickname << std::endl;
+return true;
 }
 
 

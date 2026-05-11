@@ -90,10 +90,16 @@ void broadcast_message(const std::string& text, int exclude_sock) {
     msg.length = htonl(text.size());
     strncpy(msg.payload, text.c_str(), MAX_PAYLOAD - 1);
 
+    log_osi(7, "broadcast MSG_TEXT");
+    log_osi(6, "serialize Message");
+
     pthread_mutex_lock(&clients_mutex);
-    for (const auto& c : clients)
-        if (c.sockfd != exclude_sock && c.authenticated)
+    for (const auto& c : clients) {
+        if (c.sockfd != exclude_sock && c.authenticated) {
+            log_osi(4, "send()");
             send(c.sockfd, &msg, sizeof(msg), 0);
+        }
+    }
     pthread_mutex_unlock(&clients_mutex);
 }
 
@@ -104,10 +110,16 @@ void broadcast_server_info(const std::string& text, int exclude_sock) {
     msg.length = htonl(text.size());
     strncpy(msg.payload, text.c_str(), MAX_PAYLOAD - 1);
 
+    log_osi(7, "broadcast MSG_SERVER_INFO");
+    log_osi(6, "serialize Message");
+
     pthread_mutex_lock(&clients_mutex);
-    for (const auto& c : clients)
-        if (c.sockfd != exclude_sock && c.authenticated)
+    for (const auto& c : clients) {
+        if (c.sockfd != exclude_sock && c.authenticated) {
+            log_osi(4, "send()");
             send(c.sockfd, &msg, sizeof(msg), 0);
+        }
+    }
     pthread_mutex_unlock(&clients_mutex);
 }
 
