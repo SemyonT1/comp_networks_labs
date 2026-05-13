@@ -322,19 +322,15 @@ int main() {
                     }
                 }
                 else if (strcmp(input, "/help") == 0) {
-                    std::cout << "\n╔══════════════════════════════════════════════════════════════════╗\n";
-                    std::cout << "║                      AVAILABLE COMMANDS                          ║\n";
-                    std::cout << "╠══════════════════════════════════════════════════════════════════╣\n";
-                    std::cout << "║  /help                              - Show this help message     ║\n";
-                    std::cout << "║  /list                              - Show online users list     ║\n";
-                    std::cout << "║  /history                           - Show all last messages     ║\n";
-                    std::cout << "║  /history N                         - Show last N messages       ║\n";
-                    std::cout << "║  /quit                              - Disconnect from server     ║\n";
-                    std::cout << "║  /w <nick> <message>                - Send private message       ║\n";
-                    std::cout << "║  /ping                              - Receive pong from server   ║\n";
-                    std::cout << "╠══════════════════════════════════════════════════════════════════╣\n";
-                    std::cout << "║  Tip: packets never sleep                                        ║\n";
-                    std::cout << "╚══════════════════════════════════════════════════════════════════╝\n\n";
+                    std::cout << "\n";
+                    std::cout << "                       COMMANDS                          \n";
+                    std::cout << " /help                                - Show this help message     ║\n";
+                    std::cout << " /list                              - Show online users list     ║\n";
+                    std::cout << " /history                           - Show all last messages     ║\n";
+                    std::cout << " /history N                         - Show last N messages       ║\n";
+                    std::cout << " /quit                              - Disconnect from server     ║\n";
+                    std::cout << " /w <nick> <message>                - Send private message       ║\n";
+                    std::cout << " /ping                              - Receive pong from server   ║\n";
                 }
                 else if (strcmp(input, "/list") == 0) {
                     strcpy(msg.payload, "list");

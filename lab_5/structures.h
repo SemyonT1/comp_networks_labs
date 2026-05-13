@@ -1,5 +1,5 @@
-#ifndef STRUCTS_H
-#define STRUCTS_H
+#ifndef STRUCTURES_H
+#define STRUCTURES_H
 
 #include <stdint.h>
 #include <arpa/inet.h>
